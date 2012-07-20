@@ -7,47 +7,38 @@ derby.use(require '../../ui')
 
 start = +new Date()
 
-# Derby routes can be rendered on the client and the server
-get '/:boardName?', (page, model, {boardName}) ->
-  boardName ||= 'home'
+get '/', (page) ->
+  page.redirect '/goals/example_goal/'
 
-  # Subscribes the model to any updates on this board's object. Calls back
+get '/goals/:goalId?/', (page, model, {goalId}) ->
+  # Subscribes the model to any updates on this goal's object. Calls back
   # with a scoped model equivalent to:
-  #     board = model.at "boards.#{boardName}"
-  model.subscribe "boards.#{boardName}", (err, board) ->
-    model.ref '_board', board
+  #     goal = model.at "goals.#{goalId}"
+  model.subscribe "goals.#{goalId}", (err, goal) ->
+    model.ref '_goal', goal
 
-    # setNull will set a value if the object is currently null or undefined
-    board.setNull 'welcome', "Welcome to #{boardName}!"
+    goal.setNull 'description', "Add a sentence or two outlining <em>why</em> this goal is important to you."
+    goal.setNull 'title', "Give your goal a title"
 
-    board.incr 'visits'
-
-    # This value is set for when the page initially renders
-    model.set '_timer', '0.0'
-    # Reset the counter when visiting a new route client-side
-    start = +new Date()
+    # Temporary - pull out.
+    model.push '_goalList',
+        {title: 'I want to do number 1', parentGoalId: goal.id}
+        {title: 'I want to do number 2', parentGoalId: goal.id}
+        {title: 'I want to do number 3', parentGoalId: goal.id}
 
     # Render will use the model data as well as an optional context object
     page.render
-      boardName: boardName
-      randomUrl: parseInt(Math.random() * 1e9).toString(36)
+      goalId: goalId
 
 
 ## CONTROLLER FUNCTIONS ##
 
 ready (model) ->
-  timer = null
+  # This will need to be scoped to a particular goal or user.
+  goalList = model.at '_goalList'
+  newGoal = model.at '_newGoal'
 
-  # Functions on the app can be bound to DOM events using the "x-bind"
-  # attribute in a template.
-  @stop = ->
-    # Any path name that starts with an underscore is private to the current
-    # client. Nothing set under a private path is synced back to the server.
-    model.set '_stopped', true
-    clearInterval timer
-
-  do @start = ->
-    model.set '_stopped', false
-    timer = setInterval ->
-      model.set '_timer', (((+new Date()) - start) / 1000).toFixed(1)
-    , 100
+  @addGoal = ->
+    return unless goalTitle = view.escapeHtml newGoal.get()
+    newGoal.set ''
+    goalList.insert 0, {title: goalTitle, parentGoal: model.get '_goal.id'}

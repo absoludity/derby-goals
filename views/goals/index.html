@@ -2,23 +2,22 @@
 -->
 
 <Title:>
-  {{boardName}} - {_board.visits} visits
+  { _goal.title }
 
 <Header:>
   <ui:connectionAlert>
 
 <Body:>
-  <h1>{_board.welcome}</h1>
-  <p><label>Welcome message: <input value="{_board.welcome}"></label></p>
+  <h1 contenteditable>{unescaped _goal.title}</h1>
+  <div contenteditable>{unescaped _goal.description}</div>
+  <div>Expander for other goal details (measuring etc.)</div>
+  <h2>Next tasks</h2>
+  <form x-bind=submit:addGoal>
+    <label for=new-goal>Add a new task</label>
+    <input id=new-goal value={_newGoal}>
+    <input type=submit value=Add>
+  </form>
+  <ul>{#each _goalList}<app:goal>{/}</ul>
 
-  <!-- Other templates are referenced like HTML elements -->
-  <p>This page has been visted {_board.visits} times. <app:timer></p>
-
-  <p>Let's go <a href="/{{randomUrl}}">somewhere random</a>.</p>
-
-<timer:>
-  {#if _stopped}
-    <a x-bind="click:start">Start timer</a>
-  {else}
-    You have been here for {_timer} seconds. <a x-bind="click:stop">Stop</a>
-  {/}
+<goal:>
+  <li>{unescaped .title}</li>
