@@ -1,0 +1,24 @@
+<!--
+-->
+
+<Title:>
+  {{boardName}} - {_board.visits} visits
+
+<Header:>
+  <ui:connectionAlert>
+
+<Body:>
+  <h1>{_board.welcome}</h1>
+  <p><label>Welcome message: <input value="{_board.welcome}"></label></p>
+
+  <!-- Other templates are referenced like HTML elements -->
+  <p>This page has been visted {_board.visits} times. <app:timer></p>
+
+  <p>Let's go <a href="/{{randomUrl}}">somewhere random</a>.</p>
+
+<timer:>
+  {#if _stopped}
+    <a x-bind="click:start">Start timer</a>
+  {else}
+    You have been here for {_timer} seconds. <a x-bind="click:stop">Stop</a>
+  {/}

@@ -8,19 +8,19 @@ derby.use(require '../../ui')
 start = +new Date()
 
 # Derby routes can be rendered on the client and the server
-get '/:roomName?', (page, model, {roomName}) ->
-  roomName ||= 'home'
+get '/:boardName?', (page, model, {boardName}) ->
+  boardName ||= 'home'
 
-  # Subscribes the model to any updates on this room's object. Calls back
+  # Subscribes the model to any updates on this board's object. Calls back
   # with a scoped model equivalent to:
-  #   room = model.at "rooms.#{roomName}"
-  model.subscribe "rooms.#{roomName}", (err, room) ->
-    model.ref '_room', room
+  #     board = model.at "boards.#{boardName}"
+  model.subscribe "boards.#{boardName}", (err, board) ->
+    model.ref '_board', board
 
     # setNull will set a value if the object is currently null or undefined
-    room.setNull 'welcome', "Welcome to #{roomName}!"
+    board.setNull 'welcome', "Welcome to #{boardName}!"
 
-    room.incr 'visits'
+    board.incr 'visits'
 
     # This value is set for when the page initially renders
     model.set '_timer', '0.0'
@@ -29,7 +29,7 @@ get '/:roomName?', (page, model, {roomName}) ->
 
     # Render will use the model data as well as an optional context object
     page.render
-      roomName: roomName
+      boardName: boardName
       randomUrl: parseInt(Math.random() * 1e9).toString(36)
 
 
