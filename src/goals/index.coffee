@@ -11,31 +11,25 @@ get '/', (page) ->
   page.redirect '/goals/example_goal/'
 
 get '/goals/:goalId?/', (page, model, {goalId}) ->
-  # Subscribes the model to any updates on this goal's object. Calls back
-  # with a scoped model equivalent to:
-  #     goal = model.at "goals.#{goalId}"
   model.subscribe "goals.#{goalId}", (err, goal) ->
     model.ref '_goal', goal
+    subgoalIds = goal.at 'subgoalIds'
 
     goal.setNull 'description', "Add a sentence or two outlining <em>why</em> this goal is important to you."
     goal.setNull 'title', "Give your goal a title"
 
-    # Temporary - pull out.
-    model.push '_goalList',
-        {title: 'I want to do number 1', parentGoalId: goal.id}
-        {title: 'I want to do number 2', parentGoalId: goal.id}
-        {title: 'I want to do number 3', parentGoalId: goal.id}
+    # Scope to goal.
+    model.refList '_subgoalList', 'goals', subgoalIds
 
     # Render will use the model data as well as an optional context object
     page.render
-      goalId: goalId
 
 
 ## CONTROLLER FUNCTIONS ##
 
 ready (model) ->
   # This will need to be scoped to a particular goal or user.
-  goalList = model.at '_goalList'
+  goalList = model.at '_subgoalList'
   newGoal = model.at '_newGoal'
 
   @addGoal = ->
