@@ -12,12 +12,15 @@
   <div contenteditable>{unescaped _goal.description}</div>
   <div>Expander for other goal details (measuring etc.)</div>
   <h2>Next tasks</h2>
+  {#if _subgoalList}
+  <ul>{#each _subgoalList}<app:goal>{/each}</ul>
+  {{else}}
+  You haven't added any tasks or goals yet.
+  {/if}
   <form x-bind=submit:addGoal>
-    <label for=new-goal>Add a new task</label>
-    <input id=new-goal value={_newGoal}>
+    <input id=new-goal value={_newGoal} placeholder="I will play my guitare for 10mins each day" x-webkit-speech>
     <input type=submit value=Add>
   </form>
-  <ul>{#each _subgoalList}<app:goal>{/}</ul>
 
 <goal:>
-  <li>{unescaped .title}</li>
+<li><a href="/goals/{{.id}}/">{unescaped .title}</a></li>

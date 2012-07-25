@@ -15,14 +15,15 @@ get '/goals/:goalId?/', (page, model, {goalId}) ->
     model.ref '_goal', goal
     subgoalIds = goal.at 'subgoalIds'
 
-    goal.setNull 'description', "Add a sentence or two outlining <em>why</em> this goal is important to you."
-    goal.setNull 'title', "Give your goal a title"
+    goal.setNull 'description', "Edit this text and add a sentence or two outlining <em>why</em> this goal or task is important to you."
+    goal.setNull 'title', "Give your goal or task a title"
 
     # Scope to goal.
     model.refList '_subgoalList', 'goals', subgoalIds
 
     # Render will use the model data as well as an optional context object
     page.render
+      goalId: goalId
 
 
 ## CONTROLLER FUNCTIONS ##
