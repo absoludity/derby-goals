@@ -11,17 +11,16 @@ get '/', (page) ->
   page.redirect '/goals/example_goal/'
 
 get '/goals/:goalId?/', (page, model, {goalId}) ->
-  model.subscribe "goals.#{goalId}", (err, goal) ->
+  subgoalsForGoalQuery = model.query('goals').subgoalsForGoal(goalId)
+  model.subscribe "goals.#{goalId}", subgoalsForGoalQuery, (error, goal, subgoals) ->
     model.ref '_goal', goal
     subgoalIds = goal.at 'subgoalIds'
 
-    goal.setNull 'description', "Edit this text and add a sentence or two outlining <em>why</em> this goal or task is important to you."
-    goal.setNull 'title', "Give your goal or task a title"
+    goal.setNull 'description', "Use this space to add a sentence or two outlining <em>why</em> this goal or task is important to you, so you can re-evaluate it in the future."
+    goal.setNull 'title', "I want to edit this goal title"
 
-    # Scope to goal.
     model.refList '_subgoalList', 'goals', subgoalIds
 
-    # Render will use the model data as well as an optional context object
     page.render
       goalId: goalId
 
@@ -37,3 +36,9 @@ ready (model) ->
     return unless goalTitle = view.escapeHtml newGoal.get()
     newGoal.set ''
     goalList.insert 0, {title: goalTitle, parentGoal: model.get '_goal.id'}
+
+
+  # Tell Firefox to use elements for styles instead of CSS
+  # See: https://developer.mozilla.org/en/Rich-Text_Editing_in_Mozilla
+  document.execCommand 'useCSS', false, true
+  document.execCommand 'styleWithCSS', false, false

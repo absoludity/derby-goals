@@ -14,6 +14,7 @@ server = module.exports = http.createServer expressApp
 
 derby.use(derby.logPlugin)
 store = derby.createStore listen: server
+require('./queries')(store)
 
 ONE_YEAR = 1000 * 60 * 60 * 24 * 365
 root = path.dirname path.dirname __dirname

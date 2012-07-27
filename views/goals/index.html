@@ -2,25 +2,22 @@
 -->
 
 <Title:>
-  { _goal.title }
+  Open Goal Tracker: { _goal.title }
 
 <Header:>
   <ui:connectionAlert>
 
 <Body:>
-  <h1 contenteditable>{unescaped _goal.title}</h1>
-  <div contenteditable>{unescaped _goal.description}</div>
-  <div>Expander for other goal details (measuring etc.)</div>
-  <h2>Next tasks</h2>
-  {#if _subgoalList}
-  <ul>{#each _subgoalList}<app:goal>{/each}</ul>
-  {{else}}
-  You haven't added any tasks or goals yet.
-  {/if}
-  <form x-bind=submit:addGoal>
+  <form id=head x-bind=submit:addGoal>
+    <h1 contenteditable>{unescaped _goal.title}</h1>
+    <div contenteditable>{unescaped _goal.description}</div>
+    <h2>Enter any tasks or sub-goals you need to achieve this goal</h2>
     <input id=new-goal value={_newGoal} placeholder="I will play my guitare for 10mins each day" x-webkit-speech>
     <input type=submit value=Add>
   </form>
+    {#if _subgoalList}
+    <ul>{#each _subgoalList}<app:goal>{/each}</ul>
+    {/if}
 
 <goal:>
 <li><a href="/goals/{{.id}}/">{unescaped .title}</a></li>
