@@ -17,12 +17,13 @@ body {
   background: #f7f7f7;
 }
 body,h1 {
-  font: 13px/16px Arial, sans-serif;
+  font: 13px/16px Ubuntu, sans-serif;
 }
 a {
   color: #01c;
 }
 /* end reset */
+
 h1 {
   font: 26px/24px "Ubuntu", Helvetica, Arial, sans-serif;
   font-weight: bold;
@@ -41,65 +42,21 @@ h1 {
   -moz-box-shadow: inset 0 1px #f7f7f7, 0 1px #888, 0 2px #e7e7e7;
   box-shadow: inset 0 1px #f7f7f7, 0 1px #888, 0 2px #e7e7e7;
   padding: 12px 16px;
-  white-space: nowrap;
+}
+#head p {
+  line-height: 1.3em;
 }
 #add {
+  padding-top: 20px;
   max-width: 480px;
   position: relative;
 }
-#add-input {
-  margin-right: 56px;
-}
-#add-button,
-.delete {
-  padding-left: 0;
-  padding-right: 0;
-  width: 52px;
-}
-#add-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-#new-todo {
-  width: 100%;
+#new-goal {
+  margin-right: 20px;
+  width: 400px;
 }
 
-#dragbox {
-  position: absolute;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-}
-#content {
-  max-width: 496px;
-  padding: 11px 16px 0 0;
-}
-#todos {
-  font-family: "Lucida Grande", Tahoma, sans-serif;
-  list-style: none;
-}
-.handle:hover {
-  opacity: 1;
-}
-.handle {
-  opacity: .4;
-  vertical-align: top;
-  padding: 3px 5px 0 7px;
-}
-.handle:after {
-  background: #ddd;
-  background: url("data:image/gif;base64,R0lGODdhAwADAPEAAN7e3oiIiP////f39yH/C1hNUCBEYXRhWE1QAT8ALAAAAAADAAMAQAIE1AYXVwA7");
-  background-clip: content-box;
-  background-origin: content-box;
-  vertical-align: top;
-  content: "";
-  display: block;
-  width: 8px;
-  height: 15px;
-}
-.todo {
+ul#goals li {
   width: 100%;
   height: 100%;
   position: relative;
@@ -108,20 +65,23 @@ h1 {
   box-sizing: border-box;
   padding: 3px 4px 3px 18px;
 }
-.todo > label {
-  position: absolute;
-  margin-left: -18px;
-}
-.delete {
-  font-size: 11px;
-  padding: 0;
-  position: relative;
-  height: 18px;
+ul#goals li a {
+  display: block;
+  margin-top: 10px;
+  height: 30px;
+  text-decoration: none;
+  font-size: 16px;
+  color: #444;
 }
 
-.completed [contenteditable] {
-  text-decoration: line-through;
+ul#goals li:hover {
+  background: -webkit-gradient(linear,0 0,0 100%,from(#e7e7e7),to(#d0d0d0));
+  background: -moz-linear-gradient(#e7e7e7, #d0d0d0);
+  background: -ms-linear-gradient(#e7e7e7, #d0d0d0);
+  background: -o-linear-gradient(#e7e7e7, #d0d0d0);
+  background: linear-gradient(#e7e7e7, #d0d0d0);
 }
+
 [contenteditable]:focus {
   outline: none;
 }

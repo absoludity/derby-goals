@@ -16,7 +16,7 @@ get '/goals/:goalId?/', (page, model, {goalId}) ->
     model.ref '_goal', goal
     subgoalIds = goal.at 'subgoalIds'
 
-    goal.setNull 'description', "Use this space to add a sentence or two outlining <em>why</em> this goal or task is important to you, so you can re-evaluate it in the future."
+    goal.setNull 'description', "<p>Use this space to add a sentence or two outlining <em>why</em> this goal or task is important to you, so you can re-evaluate it in the future.</p>"
     goal.setNull 'title', "I want to edit this goal title"
 
     model.refList '_subgoalList', 'goals', subgoalIds
@@ -36,9 +36,3 @@ ready (model) ->
     return unless goalTitle = view.escapeHtml newGoal.get()
     newGoal.set ''
     goalList.insert 0, {title: goalTitle, parentGoal: model.get '_goal.id'}
-
-
-  # Tell Firefox to use elements for styles instead of CSS
-  # See: https://developer.mozilla.org/en/Rich-Text_Editing_in_Mozilla
-  document.execCommand 'useCSS', false, true
-  document.execCommand 'styleWithCSS', false, false

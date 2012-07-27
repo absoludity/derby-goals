@@ -11,12 +11,13 @@
   <form id=head x-bind=submit:addGoal>
     <h1 contenteditable>{unescaped _goal.title}</h1>
     <div contenteditable>{unescaped _goal.description}</div>
-    <h2>Next steps</h2>
-    <input id=new-goal value={_newGoal} placeholder="I will play my guitare for 10mins each day" x-webkit-speech>
-    <input type=submit value=Add>
+    <div id=add>
+      <input id=new-goal value={_newGoal} placeholder="I will play my guitare for 10mins each day" x-webkit-speech>
+      <input type=submit value=Add>
+    </div>
   </form>
     {#if _subgoalList}
-    <ul>{#each _subgoalList}<app:goal>{/each}</ul>
+    <ul id=goals>{#each _subgoalList}<app:goal>{/each}</ul>
     {/if}
 
 <goal:>
