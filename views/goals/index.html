@@ -21,6 +21,25 @@
   </section>
 
   <section>
+    <app:goalDetails>
+  </section>
+  <section>
+    <app:goalProgress>
+  </section>
+
+
+<subGoal:>
+  <li>
+    <a href="/goals/{{.id}}/">{unescaped .title}</a>
+    <dl>
+      <dt>Status:</dt><dd>{.status}</dd>
+      <dt>Review:</dt><dd>{.reviewPeriod}</dd>
+
+    </dl>
+
+  </li>
+
+<goalDetails:>
   <h2>Details</h2>
     <dl>
 		<dt>Status:</dt>
@@ -33,18 +52,19 @@
 			{{/}}
 			</select>
 		</dd>
-      <dt>Review:</dt><dd contenteditable>{_goal.reviewPeriod}</dd>
+        <dt>Review every</dt>
+        <dd>
+            <select>
+                {#each _reviewPeriods}
+                <option selected="{equal(.numDays, _goal.reviewPeriod)}">
+                    {{ .name }}
+                </option>
+                {/}
+            </select>
+        </dd>
+        <dt>Next Review</dt>
+        <dd>{_goal.nextReview}</dd>
     </dl>
-  </section>
-  
 
-<subGoal:>
-  <li>
-    <a href="/goals/{{.id}}/">{unescaped .title}</a>
-    <dl>
-      <dt>Status:</dt><dd>{.status}</dd>
-      <dt>Review:</dt><dd>{.reviewPeriod}</dd>
-
-    </dl>
-
-  </li>
+<goalProgress:>
+  <h2>Goal progress</h2>
