@@ -23,12 +23,16 @@
   <section>
   <h2>Details</h2>
     <dl>
-        <dt>Status:</dt><dd><select value={_goal.status}>
-                              <option>todo</option>
-                              <option>doing</option>
-                              <option>done</option>
-                              <option>backlog</option>
-                            </select></dd>
+		<dt>Status:</dt>
+		<dd>
+			<select>
+			{#each _statusChoices}
+			<option selected="{equal(this, _goal.status)}">
+			{{ this }}
+			</option>
+			{{/}}
+			</select>
+		</dd>
       <dt>Review:</dt><dd contenteditable>{_goal.reviewPeriod}</dd>
     </dl>
   </section>

@@ -11,8 +11,10 @@ get '/', (page) ->
   page.redirect '/goals/example_goal/'
 
 get '/goals/:goalId?/', (page, model, {goalId}) ->
+
   subgoalsForGoalQuery = model.query('goals').subgoalsForGoal(goalId)
   model.subscribe "goals.#{goalId}", subgoalsForGoalQuery, (error, goal, subgoals) ->
+    model.set('_statusChoices', ['todo', 'doing', 'done', 'backlog'])
     model.ref '_goal', goal
     subgoalIds = goal.at 'subgoalIds'
 
@@ -22,7 +24,7 @@ get '/goals/:goalId?/', (page, model, {goalId}) ->
     goal.setNull 'reviewPeriod', 7
 
     model.refList '_subgoalList', 'goals', subgoalIds
-    
+
     numTodo = 0
     numTodo++ for subgoal in subgoals when subgoal.status == 'todo'
     model.set('_numTodo', numTodo)
@@ -44,5 +46,4 @@ ready (model) ->
     else
         status = 'todo'
         model.incr('_numTodo')
-    
     goalList.push title: goalTitle, status: status, reviewPeriod: 7, parentGoal: model.get '_goal.id'
