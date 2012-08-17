@@ -18,12 +18,16 @@ get '/goals/:goalId?/', (page, model, {goalId}) ->
 
     goal.setNull 'description', "<p>Use this space to add a sentence or two outlining <em>why</em> this goal or task is important to you, so you can re-evaluate it in the future.</p>"
     goal.setNull 'title', "I want to edit this goal title"
+    goal.setNull 'status', 'todo'
+    goal.setNull 'reviewPeriod', 7
 
     model.refList '_subgoalList', 'goals', subgoalIds
+    
+    numTodo = 0
+    numTodo++ for subgoal in subgoals when subgoal.status == 'todo'
+    model.set('_numTodo', numTodo)
 
-    page.render
-      goalId: goalId
-
+    page.render 'goal'
 
 ## CONTROLLER FUNCTIONS ##
 
@@ -35,4 +39,10 @@ ready (model) ->
   @addGoal = ->
     return unless goalTitle = view.escapeHtml newGoal.get()
     newGoal.set ''
-    goalList.insert 0, {title: goalTitle, parentGoal: model.get '_goal.id'}
+    if model.get('_numTodo') > 1
+        status = 'backlog'
+    else
+        status = 'todo'
+        model.incr('_numTodo')
+    
+    goalList.push title: goalTitle, status: status, reviewPeriod: 7, parentGoal: model.get '_goal.id'

@@ -1,6 +1,3 @@
-<!--
--->
-
 <Title:>
   Open Goal Tracker: { _goal.title }
 
@@ -8,17 +5,42 @@
   <ui:connectionAlert>
 
 <Body:>
-  <form id=head x-bind=submit:addGoal>
+  <section>
     <h1 contenteditable>{unescaped _goal.title}</h1>
     <div contenteditable>{unescaped _goal.description}</div>
-    <div id=add>
-      <input id=new-goal value={_newGoal} placeholder="I will play my guitare for 10mins each day" x-webkit-speech>
-      <input type=submit value=Add>
-    </div>
-  </form>
-    {#if _subgoalList}
-    <ul id=goals>{#each _subgoalList}<app:goal>{/each}</ul>
-    {/if}
+    <input id=taskOnlyCheck checked={_goal.taskOnly} type=checkbox><label for=taskOnlyCheck>This goal is a simple short-term task.</label>
+    {#unless _goal.taskOnly}
+    <form x-bind=submit:addGoal>
+        <div id=add>
+          <input id=new-goal value={_newGoal} placeholder="I will play my guitare for 10mins each day" x-webkit-speech>
+          <input type=submit value=Add>
+        </div>
+    </form>
+    <ul id=goals>{#each _subgoalList}<app:subGoal>{/each}</ul>
+  {/if}
+  </section>
 
-<goal:>
-<li><a href="/goals/{{.id}}/">{unescaped .title}</a></li>
+  <section>
+  <h2>Details</h2>
+    <dl>
+        <dt>Status:</dt><dd><select value={_goal.status}>
+                              <option>todo</option>
+                              <option>doing</option>
+                              <option>done</option>
+                              <option>backlog</option>
+                            </select></dd>
+      <dt>Review:</dt><dd contenteditable>{_goal.reviewPeriod}</dd>
+    </dl>
+  </section>
+  
+
+<subGoal:>
+  <li>
+    <a href="/goals/{{.id}}/">{unescaped .title}</a>
+    <dl>
+      <dt>Status:</dt><dd>{.status}</dd>
+      <dt>Review:</dt><dd>{.reviewPeriod}</dd>
+
+    </dl>
+
+  </li>
