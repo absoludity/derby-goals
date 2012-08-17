@@ -53,7 +53,14 @@ ready (model) ->
         model.incr('_numTodo')
     lastReviewed = new Date()
     reviewPeriod = 7
-    subGoalList.push title: goalTitle, status: status, reviewPeriod: reviewPeriod, lastReviewed: lastReviewed, nextReview: lastReviewed + reviewPeriod * 24 * 60 * 60, parentGoal: currentGoal.get('id')
+    subGoalList.push {
+        title: goalTitle,
+        status: status,
+        reviewPeriod: reviewPeriod,
+        lastReviewed: lastReviewed,
+        nextReview: new Date(lastReviewed.getTime() + reviewPeriod * MS_PER_DAY),
+        parentGoal: currentGoal.get('id')
+    }
 
   currentGoal.on('set', 'reviewPeriod', (newValue, oldValue) ->
     oldNextReview = new Date(currentGoal.get('nextReview'))
