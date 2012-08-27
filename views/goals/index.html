@@ -8,7 +8,9 @@
   <section>
     <h1 contenteditable>{unescaped _goal.title}</h1>
     <div contenteditable>{unescaped _goal.description}</div>
+    {#unless _subgoalList}
     <input id=taskOnlyCheck checked={_goal.taskOnly} type=checkbox><label for=taskOnlyCheck>This goal is a simple short-term task.</label>
+    {/unless}
     {#unless _goal.taskOnly}
     <form x-bind=submit:addGoal>
         <div id=add>
@@ -17,14 +19,14 @@
         </div>
     </form>
     <ul id=goals>{#each _subgoalList}<app:subGoal>{/each}</ul>
-  {/if}
+    {/unless}
   </section>
 
   <section>
     <app:goalDetails>
   </section>
   <section>
-    <app:goalProgress>
+    <app:goalReviews>
   </section>
 
 
@@ -66,5 +68,13 @@
         <dd>{_goal.nextReview}</dd>
     </dl>
 
-<goalProgress:>
+<goalReviews:>
   <h2>Goal progress</h2>
+  <form x-bind=submit:addReview>
+    <input value={_newReview} placeholder="I enjoyed playing for 20mins today with Won" x-webkit-speech>
+    <input type=submit value=Add>
+  </form>
+  <ul>{#each _sortedReviewList}<app:progressItem>{/each}</ul>
+
+<progressItem:>
+<li>{.timestamp}: {unescaped .comment}</li>
