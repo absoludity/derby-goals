@@ -1,12 +1,17 @@
 derby = require 'derby'
 {get, view, ready} = derby.createApp module
+derby.use(require 'derby-ui-boot')
 derby.use(require '../../ui')
 
 MS_PER_DAY = 24 * 60 * 60 * 1000
 
 initSelectOptions = (model) ->
-    model.set('_statusChoices', ['todo', 'doing', 'done', 'backlog'])
-    model.set('_reviewPeriods', [{name: 'day', numDays: 1}, {name: 'week', numDays: 7}])
+    model.set '_statusChoices', ['todo', 'doing', 'done', 'backlog']
+    model.set '_reviewPeriods', [
+        {name: 'day', numDays: 1},
+        {name: 'week', numDays: 7},
+        {name: 'month', numDays: 30}
+    ]
 
 setGoalDefaults = (goal) ->
     defaults = makeGoalDefaults()
@@ -42,7 +47,7 @@ get '/goals/:goalId?/', (page, model, {goalId}) ->
 
     model.ref '_goal._goalsTodo', model.filter('_subgoalList')
         .where('status').equals('todo')
-        
+
     # Why can't I load the reviews within the ready below (ie. they don't need
     # to be rendered initially).
     goalReviewsQuery = model.query('reviews').reviewsForGoal(goalId)

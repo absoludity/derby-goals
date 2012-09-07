@@ -5,29 +5,37 @@
   <ui:connectionAlert>
 
 <Body:>
-  <section>
+    <div class="page-header">
     <h1 contenteditable>{unescaped _goal.title}</h1>
     <div contenteditable>{unescaped _goal.description}</div>
+    </div>
     {#unless _subgoalList}
     <input id=taskOnlyCheck checked={_goal.taskOnly} type=checkbox><label for=taskOnlyCheck>This goal is a simple short-term task.</label>
     {/unless}
     {#unless _goal.taskOnly}
-    <form x-bind=submit:addGoal>
+    <form class="navbar-form" x-bind=submit:addGoal>
         <div id=add>
           <input id=new-goal value={_newGoal} placeholder="I will play my guitare for 10mins each day" x-webkit-speech>
-          <input type=submit value=Add>
+          <button type="submit" class="btn">Add</button>
         </div>
     </form>
-    <ul id=goals>{#each _subgoalList}<app:subGoal>{/each}</ul>
+    <div class="fluid-row">
+        <div class="span4 well">
+            <h2>To do</h2>
+            <ul id=goals>{#each _subgoalList}<app:subGoal>{/each}</ul>
+        </div>
+        <div class="span4 well">
+            <h2>Doing now</h2>
+        </div>
+        <div class="span4 well">
+            <h2>Done</h2>
+        </div>
+    </div>
     {/unless}
-  </section>
 
-  <section>
     <app:goalDetails>
-  </section>
-  <section>
+
     <app:goalReviews>
-  </section>
 
 
 <subGoal:>
@@ -42,6 +50,7 @@
   </li>
 
 <goalDetails:>
+  <div class="clearfix">
   <h2>Details</h2>
     <dl>
 		<dt>Status:</dt>
@@ -67,6 +76,7 @@
         <dt>Next Review</dt>
         <dd>{_goal.nextReview}</dd>
     </dl>
+  </div>
 
 <goalReviews:>
   <h2>Goal progress</h2>
