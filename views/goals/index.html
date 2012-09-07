@@ -5,86 +5,123 @@
   <ui:connectionAlert>
 
 <Body:>
-    <div class="page-header">
-    <h1 contenteditable>{unescaped _goal.title}</h1>
-    <div contenteditable>{unescaped _goal.description}</div>
+  <app:navBar>
+  <div class="container">
+    <div class="hero-unit">
+      <h1 contenteditable>{unescaped _goal.title}</h1>
+      <p contenteditable>{unescaped _goal.description}</p>
+
+      <app:goalDetails>
+
     </div>
-    {#unless _subgoalList}
-    <input id=taskOnlyCheck checked={_goal.taskOnly} type=checkbox><label for=taskOnlyCheck>This goal is a simple short-term task.</label>
-    {/unless}
-    {#unless _goal.taskOnly}
     <form class="navbar-form" x-bind=submit:addGoal>
-        <div id=add>
-          <input id=new-goal value={_newGoal} placeholder="I will play my guitare for 10mins each day" x-webkit-speech>
-          <button type="submit" class="btn">Add</button>
+        <div id=add class="input-append">
+            <input id=new-goal value={_newGoal} class="input-xlarge" placeholder="I will play my guitar for 10mins each day." type=text x-webkit-speech>
+            <button class="btn" type="submit">Add</button>
         </div>
     </form>
-    <div class="fluid-row">
-        <div class="span4 well">
-            <h2>To do</h2>
-            <ul id=goals>{#each _subgoalList}<app:subGoal>{/each}</ul>
-        </div>
-        <div class="span4 well">
-            <h2>Doing now</h2>
-        </div>
-        <div class="span4 well">
-            <h2>Done</h2>
-        </div>
-    </div>
+    {#if _subgoalList}
+    <table class=kanban>
+      <thead>
+      <tr>
+        <th>Todo</th>
+        <th>In progress</th>
+        <th>Done</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="todo" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
+            {#each _subgoalList}<app:subGoal>{/each}
+        </td>
+        <td class="inprogress" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
+        </td>
+        <td class="done" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
+        </td>
+      </tr>
+      </tbody>
+    </table>
     {/unless}
-
-    <app:goalDetails>
-
     <app:goalReviews>
+  </div>
 
 
 <subGoal:>
-  <li>
+  <div class=well draggable=true x-bind="dragstart: goalDragStart, dragend: goalDragEnd">
     <a href="/goals/{{.id}}/">{unescaped .title}</a>
-    <dl>
-      <dt>Status:</dt><dd>{.status}</dd>
-      <dt>Next review:</dt><dd>{.nextReview}</dd>
+    <p>Status: {.status}</p>
+  </div>
 
-    </dl>
-
-  </li>
 
 <goalDetails:>
-  <div class="clearfix">
-  <h2>Details</h2>
-    <dl>
-		<dt>Status:</dt>
-		<dd>
-			<select>
-			{#each _statusChoices}
-			<option selected="{equal(this, _goal.status)}">
-			{{ this }}
-			</option>
-			{{/}}
-			</select>
-		</dd>
-        <dt>Review every</dt>
-        <dd>
-            <select>
-                {#each _reviewPeriods}
-                <option selected="{equal(.numDays, _goal.reviewPeriod)}">
-                    {{ .name }}
-                </option>
-                {/}
-            </select>
-        </dd>
-        <dt>Next Review</dt>
-        <dd>{_goal.nextReview}</dd>
-    </dl>
+<a class="btn btn-primary" x-bind=click:expandDetails>Details &raquo;</a>
+<form id=goal-details class="form-horizontal {#if _goal._expandDetails}expanded{else}collapsed{/}">
+  <div class="control-group">
+    <label class="control-label">Status</label>
+    <div class="controls">
+        <select>
+        {#each _statusChoices}
+        <option selected="{equal(this, _goal.status)}">
+        {{ this }}
+        </option>
+        {{/}}
+        </select>
+    </div>
   </div>
+  <div class="control-group">
+    <label class="control-label">Review every</label>
+    <div class="controls">
+        <select>
+            {#each _reviewPeriods}
+            <option selected="{equal(.numDays, _goal.reviewPeriod)}">
+                {{ .name }}
+            </option>
+            {/}
+        </select>
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label">Next Review</label>
+    <div class="controls">
+        {_goal.nextReview}
+    </div>
+  </div>
+</form>
 
 <goalReviews:>
   <h2>Goal progress</h2>
   <form x-bind=submit:addReview>
-    <input value={_newReview} placeholder="I enjoyed playing for 20mins today with Won" x-webkit-speech>
-    <input type=submit value=Add>
+    <textarea class=input-xxlarge placeholder="I enjoyed playing for 20mins today with Won" x-webkit-speech>
+      {_newReview}
+    </textarea>
+    <button type=submit class=btn>Add</button>
   </form>
   <ul>{#each _sortedReviewList}<app:progressItem>{/each}</ul>
 
 <progressItem:>
 <li>{.timestamp}: {unescaped .comment}</li>
+
+<navBar:>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">OpenGoalTracker</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+            <form class="navbar-form pull-right">
+              <input class="span2" type="text" placeholder="Email">
+              <input class="span2" type="password" placeholder="Password">
+              <button type="submit" class="btn">Sign in</button>
+            </form>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>

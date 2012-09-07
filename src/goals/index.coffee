@@ -76,6 +76,9 @@ ready (model) ->
 
     subGoalList.push defaults
 
+  @expandDetails = ->
+      model.set '_goal._expandDetails', !Boolean(model.get('_goal._expandDetails'))
+
   @addReview = ->
       return unless progressComment = view.escapeHtml newReview.get()
       newReview.set ''
@@ -90,3 +93,32 @@ ready (model) ->
     oldNextReview = new Date(currentGoal.get('nextReview'))
     currentGoal.set 'nextReview', (new Date(oldNextReview.getTime() + (newValue - oldValue) * MS_PER_DAY)).toISOString()
   )
+
+  @goalDragStart = (e) ->
+    e.target.style.opacity = '0.4'
+    goal = model.at(e.target)
+    e.dataTransfer.setData 'text/plain', goal.get('id')
+
+  @goalDragEnd = (e) ->
+    e.target.style.opacity = '1.0'
+    cols = document.querySelectorAll '.kanban td'
+    [].forEach.call cols, (col) ->
+        col.classList.remove 'over'
+
+  @dragEnter = (e) ->
+      e.target.classList.add 'over'
+
+  @dragOver = (e) ->
+      e.preventDefault() if e.preventDefault
+      e.dataTransfer.dropEffect = 'move'
+
+  @dragLeave = (e) ->
+      e.target.classList.remove 'over'
+
+  @goalDrop = (e) ->
+      classList = e.target.classList
+      goalId = e.dataTransfer.getData('text/plain')
+      [].forEach.call ['todo', 'inprogress', 'done'], (status) ->
+          if classList.contains status
+              model.set "goals." + goalId + ".status", status
+              return
