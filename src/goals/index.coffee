@@ -6,7 +6,7 @@ derby.use(require '../../ui')
 MS_PER_DAY = 24 * 60 * 60 * 1000
 
 initSelectOptions = (model) ->
-    model.set '_statusChoices', ['todo', 'doing', 'done', 'backlog']
+    model.set '_statusChoices', ['todo', 'inprogress', 'done', 'backlog']
     model.set '_reviewPeriods', [
         {name: 'day', numDays: 1},
         {name: 'week', numDays: 7},
@@ -47,6 +47,10 @@ get '/goals/:goalId?/', (page, model, {goalId}) ->
 
     model.ref '_goal._goalsTodo', model.filter('_subgoalList')
         .where('status').equals('todo')
+    model.ref '_goal._goalsInProgress', model.filter('_subgoalList')
+        .where('status').equals('inprogress')
+    model.ref '_goal._goalsDone', model.filter('_subgoalList')
+        .where('status').equals('done')
 
     # Why can't I load the reviews within the ready below (ie. they don't need
     # to be rendered initially).
@@ -95,15 +99,12 @@ ready (model) ->
   )
 
   @goalDragStart = (e) ->
-    e.target.style.opacity = '0.4'
+    e.target.classList.add 'dragging'
     goal = model.at(e.target)
     e.dataTransfer.setData 'text/plain', goal.get('id')
 
   @goalDragEnd = (e) ->
-    e.target.style.opacity = '1.0'
-    cols = document.querySelectorAll '.kanban td'
-    [].forEach.call cols, (col) ->
-        col.classList.remove 'over'
+    e.target.classList.remove 'dragging'
 
   @dragEnter = (e) ->
       e.target.classList.add 'over'
@@ -117,6 +118,7 @@ ready (model) ->
 
   @goalDrop = (e) ->
       classList = e.target.classList
+      classList.remove 'over'
       goalId = e.dataTransfer.getData('text/plain')
       [].forEach.call ['todo', 'inprogress', 'done'], (status) ->
           if classList.contains status

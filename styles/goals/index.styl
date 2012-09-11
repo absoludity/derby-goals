@@ -1,46 +1,39 @@
-body {
-    padding-top: 60px;
-    padding-bottom: 40px;
-}
+@import 'nib'
 
-#goal-details {
-    height: 0;
-    overflow: hidden;
-    -webkit-transition: height 0.5s ease-in-out;
-    -moz-transition: height 1s ease-in-out;
-    -o-transition: height 1s ease-in-out;
-}
+body
+    padding-top: 60px
+    padding-bottom: 40px
 
-#goal-details.collapsed {
-    height: 0;
-}
-#goal-details.expanded {
-    height: 150px;
-}
-textarea {
-    display:block;
-}
+#goal-details
+    height: 0
+    overflow: hidden
+    transition: height 0.3s ease-in-out
+    &.collapsed
+        height: 0
+    &.expanded
+        height: 150px
+
+textarea
+    display:block
 
 /* Prevent the text contents of draggable elements from being selectable. */
-[draggable] {
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-  cursor: move;
-}
-
-.kanban td.over {
-  border: 2px dashed #000;
-}
+[draggable]
+  user-select: none
+  cursor: move
 
 /* Table kanban instead */
-table.kanban {
+table.kanban
     width: 100%
-}
-.kanban th {
-    font-size: 30px
-}
-.kanban tbody tr {
-    height: 300px
-}
+    td.over
+        border: 2px dashed #000;
+    th
+        font-size: 30px
+        width: 33.3%
+    tbody tr
+        height: 300px
+        vertical-align: top
+    td div.well
+        width: 80%
+        margin: 20px auto
+    div.dragging
+        opacity: 0.4

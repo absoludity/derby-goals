@@ -32,11 +32,13 @@
       <tbody>
       <tr>
         <td class="todo" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
-            {#each _subgoalList}<app:subGoal>{/each}
+            {#each _goal._goalsTodo}<app:subGoal>{/each}
         </td>
         <td class="inprogress" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
+            {#each _goal._goalsInProgress}<app:subGoal>{/each}
         </td>
         <td class="done" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
+            {#each _goal._goalsDone}<app:subGoal>{/each}
         </td>
       </tr>
       </tbody>
@@ -90,6 +92,7 @@
 
 <goalReviews:>
   <h2>Goal progress</h2>
+  <p>Make this a tab ... Board, Feedback, ...</p>
   <form x-bind=submit:addReview>
     <textarea class=input-xxlarge placeholder="I enjoyed playing for 20mins today with Won" x-webkit-speech>
       {_newReview}
