@@ -1,6 +1,6 @@
 derby = require 'derby'
 {get, view, ready} = derby.createApp module
-derby.use(require 'derby-ui-boot')
+derby.use(require 'derby-ui-boot', {'styles': ['bootstrap', 'tabs']})
 derby.use(require '../../ui')
 
 MS_PER_DAY = 24 * 60 * 60 * 1000
@@ -51,6 +51,8 @@ get '/goals/:goalId?/', (page, model, {goalId}) ->
         .where('status').equals('inprogress')
     model.ref '_goal._goalsDone', model.filter('_subgoalList')
         .where('status').equals('done')
+    model.ref '_goal._goalsBacklog', model.filter('_subgoalList')
+        .where('status').equals('backlog')
 
     # Why can't I load the reviews within the ready below (ie. they don't need
     # to be rendered initially).
@@ -82,6 +84,9 @@ ready (model) ->
 
   @expandDetails = ->
       model.set '_goal._expandDetails', !Boolean(model.get('_goal._expandDetails'))
+
+  @expandDBacklog = ->
+      model.set '_goal._expandBacklog', !Boolean(model.get('_goal._expandBacklog'))
 
   @addReview = ->
       return unless progressComment = view.escapeHtml newReview.get()

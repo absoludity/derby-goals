@@ -21,19 +21,15 @@ textarea
   user-select: none
   cursor: move
 
-/* Table kanban instead */
-table.kanban
-    width: 100%
-    td.over
-        border: 2px dashed #000;
-    th
-        font-size: 30px
-        width: 33.3%
-    tbody tr
-        height: 300px
-        vertical-align: top
-    td div.well
+div.kanban
+    h2
+        text-align: center
+    .col
+        height: 400px
+        &.over
+            border: 1px dashed #000;
+    .card
         width: 80%
         margin: 20px auto
-    div.dragging
-        opacity: 0.4
+        &.dragging
+            opacity: 0.4
