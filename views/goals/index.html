@@ -47,8 +47,8 @@
         </div>
     </form>
     {#if _goal._goalsBacklog}
-    <div class="span4 col">
-        <a class="btn btn-primary" x-bind=click:expandBacklog>Backlog ({_goal._goalsBacklog.length}) &raquo;</a>
+    <div class="span4 col backlog" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
+        <h2>Backlog ({_goal._goalsBacklog.length} items)</h2>
         <div class="{#if _goal._expandBacklog}expanded{else}collapsed{/}">
             {#each _goal._goalsBacklog}<app:subGoal>{/each}
         </div>
@@ -70,7 +70,7 @@
     <label class="control-label">Status</label>
     <div class="controls">
         <select>
-        {#each _statusChoices}
+        {#each _goal._statusChoices}
         <option selected="{equal(this, _goal.status)}">
         {{ this }}
         </option>
@@ -82,7 +82,7 @@
     <label class="control-label">Review every</label>
     <div class="controls">
         <select>
-            {#each _reviewPeriods}
+            {#each _goal._reviewPeriods}
             <option selected="{equal(.numDays, _goal.reviewPeriod)}">
                 {{ .name }}
             </option>

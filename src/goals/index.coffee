@@ -2,65 +2,34 @@ derby = require 'derby'
 {get, view, ready} = derby.createApp module
 derby.use(require 'derby-ui-boot', {'styles': ['bootstrap', 'tabs']})
 derby.use(require '../../ui')
-
-MS_PER_DAY = 24 * 60 * 60 * 1000
-
-initSelectOptions = (model) ->
-    model.set '_statusChoices', ['todo', 'inprogress', 'done', 'backlog']
-    model.set '_reviewPeriods', [
-        {name: 'day', numDays: 1},
-        {name: 'week', numDays: 7},
-        {name: 'month', numDays: 30}
-    ]
-
-setGoalDefaults = (goal) ->
-    defaults = makeGoalDefaults()
-    goal.setNull 'description', defaults.description,
-    goal.setNull 'title', defaults.title,
-    goal.setNull 'status', defaults.status,
-    goal.setNull 'lastReviewed', defaults.lastReviewed,
-    goal.setNull 'reviewPeriod', defaults.reviewPeriod,
-    goal.setNull 'nextReview', defaults.nextReview
-
-makeGoalDefaults = () ->
-    lastReviewed = new Date()
-    return {
-        description: "Use this space to add a sentence or two outlining <em>why</em> this goal or task is important to you, so you can re-evaluate it in the future.",
-        title: "I want to edit this goal title",
-        status: "todo",
-        lastReviewed: lastReviewed,
-        reviewPeriod: 7,
-        nextReview: (new Date(lastReviewed.getTime() + 7 * MS_PER_DAY)).toISOString()
-    }
+goalHelpers = require './helpers'
 
 get '/', (page) ->
-  page.redirect '/goals/example_goal/'
+    page.redirect '/goals/example_goal/'
 
 get '/goals/:goalId?/', (page, model, {goalId}) ->
-  subgoalsForGoalQuery = model.query('goals').subgoalsForGoal(goalId)
-  model.subscribe "goals.#{goalId}", subgoalsForGoalQuery, (error, goal, subgoals) ->
-    initSelectOptions(model)
-    model.ref '_goal', goal
-    setGoalDefaults(goal)
-    subgoalIds = goal.at 'subgoalIds'
-    model.refList '_subgoalList', 'goals', subgoalIds
-
-    model.ref '_goal._goalsTodo', model.filter('_subgoalList')
-        .where('status').equals('todo')
-    model.ref '_goal._goalsInProgress', model.filter('_subgoalList')
-        .where('status').equals('inprogress')
-    model.ref '_goal._goalsDone', model.filter('_subgoalList')
-        .where('status').equals('done')
-    model.ref '_goal._goalsBacklog', model.filter('_subgoalList')
-        .where('status').equals('backlog')
-
-    # Why can't I load the reviews within the ready below (ie. they don't need
-    # to be rendered initially).
+    subgoalsForGoalQuery = model.query('goals').subgoalsForGoal(goalId)
     goalReviewsQuery = model.query('reviews').reviewsForGoal(goalId)
-    model.subscribe goalReviewsQuery, (error, reviews) ->
-      model.ref '_reviewList', reviews
-      model.ref '_sortedReviewList', reviews.sort(['timestamp', 'desc'])
-      page.render 'goal'
+    model.subscribe "goals.#{goalId}", subgoalsForGoalQuery, goalReviewsQuery, (error, goal, subgoals, reviews) ->
+        goalHelpers.initSelectOptions(goal)
+        model.ref '_goal', goal
+        goalHelpers.setGoalDefaults(goal)
+        subgoalIds = goal.at 'subgoalIds'
+        model.refList '_subgoalList', 'goals', subgoalIds
+
+        model.ref '_goal._goalsTodo', model.filter('_subgoalList')
+            .where('status').equals('todo')
+        model.ref '_goal._goalsInProgress', model.filter('_subgoalList')
+            .where('status').equals('inprogress')
+        model.ref '_goal._goalsDone', model.filter('_subgoalList')
+            .where('status').equals('done')
+        model.ref '_goal._goalsBacklog', model.filter('_subgoalList')
+            .where('status').equals('backlog')
+
+        model.ref '_reviewList', reviews
+        model.ref '_sortedReviewList', reviews.sort(['timestamp', 'desc'])
+
+        page.render 'goal'
 
 
 ready (model) ->
@@ -73,7 +42,7 @@ ready (model) ->
   @addGoal = ->
     return unless goalTitle = view.escapeHtml newGoal.get()
     newGoal.set ''
-    defaults = makeGoalDefaults()
+    defaults = goalHelpers.makeGoalDefaults()
     numTodos = currentGoal.at('_goalsTodo').get().length
     if numTodos > 1
         defaults.status = 'backlog'
@@ -100,7 +69,7 @@ ready (model) ->
 
   currentGoal.on('set', 'reviewPeriod', (newValue, oldValue) ->
     oldNextReview = new Date(currentGoal.get('nextReview'))
-    currentGoal.set 'nextReview', (new Date(oldNextReview.getTime() + (newValue - oldValue) * MS_PER_DAY)).toISOString()
+    currentGoal.set 'nextReview', (new Date(oldNextReview.getTime() + (newValue - oldValue) * goalHelpers.MS_PER_DAY)).toISOString()
   )
 
   @goalDragStart = (e) ->
@@ -125,7 +94,7 @@ ready (model) ->
       classList = e.target.classList
       classList.remove 'over'
       goalId = e.dataTransfer.getData('text/plain')
-      [].forEach.call ['todo', 'inprogress', 'done'], (status) ->
+      [].forEach.call ['todo', 'inprogress', 'done', 'backlog'], (status) ->
           if classList.contains status
               model.set "goals." + goalId + ".status", status
               return
