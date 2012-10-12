@@ -8,12 +8,18 @@ serverError = require './serverError'
 
 
 ## SERVER CONFIGURATION ##
+nconf = require('nconf')
+
+nconf.argv()
+     .env()
+     .file file: 'config/defaults.json'
 
 expressApp = express()
 server = module.exports = http.createServer expressApp
 
-derby.use(derby.logPlugin)
-store = derby.createStore listen: server
+derby.use derby.logPlugin
+
+store = require './store'
 require('./queries')(store)
 
 ONE_YEAR = 1000 * 60 * 60 * 24 * 365

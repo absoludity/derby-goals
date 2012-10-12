@@ -16,6 +16,15 @@
     </div>
     <boot:tabs>
         <boot:tab title="Task board">
+            <form class="form-inline" x-bind=submit:addGoal>
+            <div class="control-group">
+                <label class="control-label">What steps can you take towards this goal?</label>
+                <div id=add class="controls input-append">
+                    <input id=new-goal value={_newGoal} class="input-xlarge" placeholder="I will play my guitar for 10mins each day." type=text x-webkit-speech>
+                    <button class="btn" type="submit">Add</button>
+                </div>
+            </div>
+            </form>
             <app:kanBan>
         </boot:tab>
         <boot:tab title="Reviews and feedback">
@@ -40,12 +49,6 @@
             {#each _goal._goalsDone}<app:subGoal>{/each}
         </div>
     </div>
-    <form class="navbar-form" x-bind=submit:addGoal>
-        <div id=add class="input-append">
-            <input id=new-goal value={_newGoal} class="input-xlarge" placeholder="I will play my guitar for 10mins each day." type=text x-webkit-speech>
-            <button class="btn" type="submit">Add</button>
-        </div>
-    </form>
     {#if _goal._goalsBacklog}
     <div class="span4 col backlog" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
         <h2>Backlog ({_goal._goalsBacklog.length} items)</h2>
