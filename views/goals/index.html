@@ -1,118 +1,22 @@
+<import: src="users">
+<import: src="goals">
+
 <Title:>
-  Open Goal Tracker: { _goal.title }
+    Open Goal Tracker
 
 <Header:>
-  <ui:connectionAlert>
+    <ui:connectionAlert>
 
+<!-- Why can't I overwrite custom templates like app:content here
+     in goals.html? -->
 <Body:>
-  <app:navBar>
-  <div class="container">
-    <div class="hero-unit">
-      <h1 contenteditable>{unescaped _goal.title}</h1>
-      <p contenteditable>{unescaped _goal.description}</p>
-
-      <app:goalDetails>
-
+    <app:navBar>
+    <div class="container">
+		<app:content>
     </div>
-    <boot:tabs>
-        <boot:tab title="Task board">
-            <form class="form-inline" x-bind=submit:addGoal>
-            <div class="control-group">
-                <label class="control-label">What steps can you take towards this goal?</label>
-                <div id=add class="controls input-append">
-                    <input id=new-goal value={_newGoal} class="input-xlarge" placeholder="I will play my guitar for 10mins each day." type=text x-webkit-speech>
-                    <button class="btn" type="submit">Add</button>
-                </div>
-            </div>
-            </form>
-            <app:kanBan>
-        </boot:tab>
-        <boot:tab title="Reviews and feedback">
-            <app:goalReviews>
-        </boot:tab>
 
-    </boot:tabs>
-  </div>
-
-<kanBan:>
-    <div class="row-fluid kanban">
-        <div class="span4 col todo" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
-            <h2>Todo</h2>
-            {#each _goal._goalsTodo}<app:subGoal>{/each}
-        </div>
-        <div class="span4 col inprogress" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
-            <h2>In progress</h2>
-            {#each _goal._goalsInProgress}<app:subGoal>{/each}
-        </div>
-        <div class="span4 col done" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
-            <h2>Done</h2>
-            {#each _goal._goalsDone}<app:subGoal>{/each}
-        </div>
-    </div>
-    {#if _goal._goalsBacklog}
-    <div class="span4 col backlog" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
-        <h2>Backlog ({_goal._goalsBacklog.length} items)</h2>
-        <div class="{#if _goal._expandBacklog}expanded{else}collapsed{/}">
-            {#each _goal._goalsBacklog}<app:subGoal>{/each}
-        </div>
-    </div>
-    {/if}
-
-
-<subGoal:>
-  <div class="well card" draggable=true x-bind="dragstart: goalDragStart, dragend: goalDragEnd">
-    <a href="/goals/{{.id}}/">{unescaped .title}</a>
-    <p>Status: {.status}</p>
-  </div>
-
-
-<goalDetails:>
-<a class="btn btn-primary" x-bind=click:expandDetails>Details &raquo;</a>
-<form id=goal-details class="form-horizontal {#if _goal._expandDetails}expanded{else}collapsed{/}">
-  <div class="control-group">
-    <label class="control-label">Status</label>
-    <div class="controls">
-        <select>
-        {#each _goal._statusChoices}
-        <option selected="{equal(this, _goal.status)}">
-        {{ this }}
-        </option>
-        {{/}}
-        </select>
-    </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label">Review every</label>
-    <div class="controls">
-        <select>
-            {#each _goal._reviewPeriods}
-            <option selected="{equal(.numDays, _goal.reviewPeriod)}">
-                {{ .name }}
-            </option>
-            {/}
-        </select>
-    </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label">Next Review</label>
-    <div class="controls">
-        {_goal.nextReview}
-    </div>
-  </div>
-</form>
-
-<goalReviews:>
-  <h2>Goal progress</h2>
-  <form x-bind=submit:addReview>
-    <textarea class=input-xxlarge placeholder="I enjoyed playing for 20mins today with Won" x-webkit-speech>
-      {_newReview}
-    </textarea>
-    <button type=submit class=btn>Add</button>
-  </form>
-  <ul>{#each _sortedReviewList}<app:progressItem>{/each}</ul>
-
-<progressItem:>
-<li>{.timestamp}: {unescaped .comment}</li>
+<content:>
+    <h1>Content goes here</h1>
 
 <navBar:>
     <div class="navbar navbar-inverse navbar-fixed-top">

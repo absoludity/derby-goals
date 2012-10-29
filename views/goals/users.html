@@ -1,0 +1,16 @@
+<Title:>
+	Open Goal Tracker: Your goals...
+
+<Body:>
+    <app:navBar>
+    <div class="container">
+		<app:content>
+    </div>
+
+<content:>
+	<h1>Goals</h1>
+	{#each _user._pendingGoals}
+		<div class="goal">
+			{.title} ({.status})
+		</div>
+	{/each}

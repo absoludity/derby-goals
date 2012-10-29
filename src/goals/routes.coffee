@@ -26,4 +26,10 @@ get '/goals/:goalId?/', (page, model, {goalId}) ->
         model.ref '_reviewList', reviews
         model.ref '_sortedReviewList', reviews.sort(['timestamp', 'desc'])
 
-        page.render 'goal'
+        page.render 'goals'
+
+get '/users/:userId?/', (page, model, {userId}) ->
+	goalsForUserQuery = model.query('goals').goalsForUser(userId)
+	model.subscribe "users.#{userId}", goalsForUserQuery, (error, goals) ->
+		model.ref '_goals', goals
+		page.render 'users'
