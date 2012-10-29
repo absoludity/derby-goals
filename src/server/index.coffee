@@ -5,6 +5,7 @@ gzippo = require 'gzippo'
 derby = require 'derby'
 goals = require '../goals'
 serverError = require './serverError'
+authentication = require './auth'
 
 
 ## SERVER CONFIGURATION ##
@@ -39,14 +40,16 @@ expressApp
 
   # Uncomment and supply secret to add Derby session handling
   # Derby session middleware creates req.session and socket.io sessions
-  # .use(express.cookieParser())
-  # .use(store.sessionMiddleware
-  #   secret: process.env.SESSION_SECRET || 'YOUR SECRET HERE'
-  #   cookie: {maxAge: ONE_YEAR}
-  # )
+  .use(express.cookieParser())
+  .use(store.sessionMiddleware
+    secret: process.env.SESSION_SECRET || 'YOUR SECRET HERE'
+    cookie: {maxAge: ONE_YEAR}
+  )
 
   # Adds req.getModel method
   .use(store.modelMiddleware())
+  # Adds users.$userId from session.
+  .use(authentication.middleware)
   # Creates an express middleware from the app's routes
   .use(goals.router())
   .use(expressApp.router)
