@@ -7,6 +7,7 @@ ready (model) ->
     currentGoal = model.at '_goal'
     newReview = model.at '_newReview'
     reviewList = model.at '_reviewList'
+    sessionUserId = model.at '_sessionUserId'
 
     @addGoal = ->
         return unless goalTitle = view.escapeHtml newGoal.get()
@@ -17,6 +18,7 @@ ready (model) ->
             defaults.status = 'backlog'
         defaults.title = goalTitle
         defaults.parentGoal = currentGoal.get('id')
+        defaults.userId = sessionUserId.get()
         subGoalList.push defaults
 
     @expandDetails = ->
@@ -34,7 +36,7 @@ ready (model) ->
             timestamp: progressDate,
             goalId: currentGoal.get('id')
         }
-  
+
     currentGoal.on('set', 'reviewPeriod', (newValue, oldValue) ->
         oldNextReview = new Date(currentGoal.get('nextReview'))
         currentGoal.set 'nextReview', (new Date(oldNextReview.getTime() + (newValue - oldValue) * goalHelpers.MS_PER_DAY)).toISOString()

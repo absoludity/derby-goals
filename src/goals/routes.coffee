@@ -28,8 +28,14 @@ get '/goals/:goalId?/', (page, model, {goalId}) ->
 
         page.render 'goals'
 
+get '/users/', (page, model) ->
+    allUsersQuery = model.query('users').allUsers()
+    model.subscribe allUsersQuery, (errors, users) ->
+        model.ref '_users', users
+        page.render 'users'
+
 get '/users/:userId?/', (page, model, {userId}) ->
-	goalsForUserQuery = model.query('goals').goalsForUser(userId)
-	model.subscribe "users.#{userId}", goalsForUserQuery, (error, goals) ->
-		model.ref '_goals', goals
-		page.render 'users'
+    goalsForUserQuery = model.query('goals').goalsForUser(userId)
+    model.subscribe goalsForUserQuery, (error, goals) ->
+        model.ref '_goals', goals
+        page.render 'user'

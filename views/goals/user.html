@@ -1,0 +1,18 @@
+<Title:>
+    Open Goal Tracker: Your goals...
+
+<Body:>
+    <app:navBar>
+    <div class="container">
+        <h1>SessionUserId: {_sessionUserId}</h1>
+        <app:content>
+    </div>
+
+<content:>
+    <h1>Goals</h1>
+    {#each _goals}
+        <div class="goal">
+            <a href="/goals/{{.id}}/">{.title} ({.status})</a>
+        </div>
+    {/each}
+
