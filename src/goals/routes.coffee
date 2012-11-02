@@ -25,8 +25,9 @@ get '/goals/:goalId?/', (page, model, {goalId}) ->
 
         model.ref '_reviewList', reviews
         model.ref '_sortedReviewList', reviews.sort(['timestamp', 'desc'])
-
-        page.render 'goals'
+        model.fetch "users.#{goal.get('userId')}", (error, user) ->
+            model.ref '_goal._user', user
+            page.render 'goals'
 
 get '/users/', (page, model) ->
     allUsersQuery = model.query('users').allUsers()
@@ -36,6 +37,7 @@ get '/users/', (page, model) ->
 
 get '/users/:userId?/', (page, model, {userId}) ->
     goalsForUserQuery = model.query('goals').goalsForUser(userId)
-    model.subscribe goalsForUserQuery, (error, goals) ->
+    model.subscribe "users.#{userId}", goalsForUserQuery, (error, user, goals) ->
         model.ref '_goals', goals
+        model.ref '_user', user
         page.render 'user'

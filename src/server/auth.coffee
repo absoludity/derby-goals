@@ -9,5 +9,7 @@ checkUser = (model) ->
     session = model.session
     unless session.userId
         session.userId = derby.uuid()
-        model.set "users.#{session.userId}", {auth:{}}
+        model.set "users.#{session.userId}",
+            auth:{}
+            name: "Anonymous"
     model.set "_sessionUserId", session.userId

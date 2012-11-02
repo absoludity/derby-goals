@@ -13,12 +13,14 @@
     <table>
         <thead>
             <tr>
+                <th>Name</th>
                 <th>UserId</th>
             </tr>
         </thead>
         <tbody>
         {#each _users}
             <tr>
+                <td>{{.name}}</td>
                 <td><a href="/users/{{.id}}/">{{.id}}</a></td>
             </tr>
         {/each}
