@@ -1,8 +1,9 @@
 {get} = require './index'
 goalHelpers = require './helpers'
 
-get '/', (page) ->
-    page.redirect '/goals/example_goal/'
+get '/', (page, model) ->
+    sessionUserId = model.at '_sessionUserId'
+    page.redirect "/users/#{sessionUserId.get()}/"
 
 get '/goals/:goalId?/', (page, model, {goalId}) ->
     subgoalsForGoalQuery = model.query('goals').subgoalsForGoal(goalId)
