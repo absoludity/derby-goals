@@ -13,8 +13,8 @@ ready (model) ->
         return unless goalTitle = view.escapeHtml newGoal.get()
         newGoal.set ''
         defaults = goalHelpers.makeGoalDefaults()
-        numTodos = currentGoal.at('_goalsTodo').get().length
-        if numTodos > 1
+        goalsTodo = currentGoal.at('_goalsTodo').get()
+        if goalsTodo and goalsTodo.length > 1
             defaults.status = 'backlog'
         defaults.title = goalTitle
         defaults.parentGoal = currentGoal.get('id')
