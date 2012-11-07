@@ -29,4 +29,3 @@ module.exports.makeGoalDefaults = () ->
         reviewPeriod: 7,
         nextReview: (new Date(lastReviewed.getTime() + 7 * this.MS_PER_DAY)).toISOString()
     }
-

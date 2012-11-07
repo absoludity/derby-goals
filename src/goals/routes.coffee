@@ -12,15 +12,15 @@ get '/goals/:goalId?/', (page, model, {goalId}) ->
         model.ref '_goal', goal
         goalHelpers.setGoalDefaults(goal)
         subgoalIds = goal.at 'subgoalIds'
-        model.refList '_subgoalList', 'goals', subgoalIds
+        model.refList '_goalList', 'goals', subgoalIds
 
-        model.ref '_goal._goalsTodo', model.filter('_subgoalList')
+        model.ref '_goal._goalsTodo', model.filter('_goalList')
             .where('status').equals('todo')
-        model.ref '_goal._goalsInProgress', model.filter('_subgoalList')
+        model.ref '_goal._goalsInProgress', model.filter('_goalList')
             .where('status').equals('inprogress')
-        model.ref '_goal._goalsDone', model.filter('_subgoalList')
+        model.ref '_goal._goalsDone', model.filter('_goalList')
             .where('status').equals('done')
-        model.ref '_goal._goalsBacklog', model.filter('_subgoalList')
+        model.ref '_goal._goalsBacklog', model.filter('_goalList')
             .where('status').equals('backlog')
 
         model.ref '_reviewList', reviews
@@ -38,6 +38,6 @@ get '/users/', (page, model) ->
 get '/users/:userId?/', (page, model, {userId}) ->
     goalsForUserQuery = model.query('goals').goalsForUser(userId)
     model.subscribe "users.#{userId}", goalsForUserQuery, (error, user, goals) ->
-        model.ref '_goals', goals
+        model.ref '_goalList', goals
         model.ref '_user', user
         page.render 'user'

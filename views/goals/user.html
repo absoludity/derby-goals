@@ -4,16 +4,19 @@
 <Body:>
     <app:navBar>
     <div class="container">
-        <h2>Name: </h2>
-        <p contenteditable>{_user.name}</p>
         <app:content>
     </div>
 
 <content:>
+    <div class="hero-unit">
+      <h1 contenteditable>{_user.name}</h1>
+
+      <app:goalDetails>
+
+    </div>
+
+<goalDetails:>
     <h1>Goals for {_user.name}</h1>
-    {#each _goals}
-        <div class="goal">
-            <a href="/goals/{{.id}}/">{.title} ({.status})</a>
-        </div>
-    {/each}
+    <app:newGoal>
+    <app:kanBan>
 

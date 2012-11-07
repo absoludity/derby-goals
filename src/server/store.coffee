@@ -10,6 +10,7 @@ if mongo_url
 		db:
 			type: 'Mongo'
 			uri: mongo_url
+            safe: true
 else
 	module.exports = store = derby.createStore
 		listen: server

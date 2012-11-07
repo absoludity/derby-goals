@@ -2,14 +2,14 @@
 goalHelpers = require './helpers'
 
 ready (model) ->
-    subGoalList = model.at '_subgoalList'
-    newGoal = model.at '_newGoal'
+    subGoalList = model.at '_goalList'
     currentGoal = model.at '_goal'
     newReview = model.at '_newReview'
     reviewList = model.at '_reviewList'
     sessionUserId = model.at '_sessionUserId'
 
     @addGoal = ->
+        newGoal = model.at '_newGoal'
         return unless goalTitle = view.escapeHtml newGoal.get()
         newGoal.set ''
         defaults = goalHelpers.makeGoalDefaults()
