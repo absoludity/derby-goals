@@ -40,4 +40,12 @@ get '/users/:userId?/', (page, model, {userId}) ->
     model.subscribe "users.#{userId}", goalsForUserQuery, (error, user, goals) ->
         model.ref '_goalList', goals
         model.ref '_user', user
+        model.ref '_goalsTodo', model.filter('_goalList')
+            .where('status').equals('todo')
+        model.ref '_goalsInProgress', model.filter('_goalList')
+            .where('status').equals('inprogress')
+        model.ref '_goalsDone', model.filter('_goalList')
+            .where('status').equals('done')
+        model.ref '_goalsBacklog', model.filter('_goalList')
+            .where('status').equals('backlog')
         page.render 'user'
