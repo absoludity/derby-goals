@@ -48,4 +48,6 @@ get '/users/:userId?/', (page, model, {userId}) ->
             .where('status').equals('done')
         model.ref '_goalsBacklog', model.filter('_goalList')
             .where('status').equals('backlog')
-        page.render 'user'
+        page.render 'user',
+            newGoalPlaceholder: 'I want to learn to program computers',
+            newGoalLabel: 'What do you want to do?'

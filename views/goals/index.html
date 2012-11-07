@@ -47,9 +47,11 @@
 <newGoal:>
     <form class="form-inline" x-bind=submit:addGoal>
     <div class="control-group">
-        <label class="control-label">What steps can you take towards this goal?</label>
+        <label class="control-label">
+            {#if newGoalLabel}{{newGoalLabel}}{else}What steps can you take towards this goal?{/}
+        </label>
         <div id=add class="controls input-append">
-            <input id=new-goal value={_newGoal} class="input-xlarge" placeholder="I will play my guitar for 10mins each day." type=text x-webkit-speech>
+            <input id=new-goal value={_newGoal} class="input-xlarge" placeholder="{#if newGoalPlaceholder}{{newGoalPlaceholder}}{else}I will play my guitar for 10mins each day.{/}" type=text x-webkit-speech>
             <button class="btn" type="submit">Add</button>
         </div>
     </div>
