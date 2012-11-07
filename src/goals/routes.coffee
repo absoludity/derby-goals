@@ -14,13 +14,13 @@ get '/goals/:goalId?/', (page, model, {goalId}) ->
         subgoalIds = goal.at 'subgoalIds'
         model.refList '_goalList', 'goals', subgoalIds
 
-        model.ref '_goal._goalsTodo', model.filter('_goalList')
+        model.ref '_goalsTodo', model.filter('_goalList')
             .where('status').equals('todo')
-        model.ref '_goal._goalsInProgress', model.filter('_goalList')
+        model.ref '_goalsInProgress', model.filter('_goalList')
             .where('status').equals('inprogress')
-        model.ref '_goal._goalsDone', model.filter('_goalList')
+        model.ref '_goalsDone', model.filter('_goalList')
             .where('status').equals('done')
-        model.ref '_goal._goalsBacklog', model.filter('_goalList')
+        model.ref '_goalsBacklog', model.filter('_goalList')
             .where('status').equals('backlog')
 
         model.ref '_reviewList', reviews

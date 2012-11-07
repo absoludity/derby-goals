@@ -59,22 +59,22 @@
     <div class="row-fluid kanban">
         <div class="span4 col todo" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
             <h2>Todo</h2>
-            {#each _goal._goalsTodo}<app:subGoal>{/each}
+            {#each _goalsTodo}<app:subGoal>{/each}
         </div>
         <div class="span4 col inprogress" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
             <h2>In progress</h2>
-            {#each _goal._goalsInProgress}<app:subGoal>{/each}
+            {#each _goalsInProgress}<app:subGoal>{/each}
         </div>
         <div class="span4 col done" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
             <h2>Done</h2>
-            {#each _goal._goalsDone}<app:subGoal>{/each}
+            {#each _goalsDone}<app:subGoal>{/each}
         </div>
     </div>
-    {#if _goal._goalsBacklog}
+    {#if _goalsBacklog}
     <div class="span4 col backlog" x-bind="dragenter: dragEnter, dragover: dragOver, dragleave: dragLeave, drop: goalDrop">
-        <h2>Backlog ({_goal._goalsBacklog.length} items)</h2>
+        <h2>Backlog ({_goalsBacklog.length} items)</h2>
         <div class="{#if _goal._expandBacklog}expanded{else}collapsed{/}">
-            {#each _goal._goalsBacklog}<app:subGoal>{/each}
+            {#each _goalsBacklog}<app:subGoal>{/each}
         </div>
     </div>
     {/if}
