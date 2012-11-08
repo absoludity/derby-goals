@@ -4,7 +4,8 @@
 <Body:>
     <app:navBar>
     <div class="container">
-        <h1>Your SessionUserId: {_sessionUserId}</h1>
+        <h1>Current users</h1>
+        <p>You are currently logged in as: {{_currentUser.name}}  (userId: {{_sessionUserId}})</p>
         <app:content>
     </div>
 

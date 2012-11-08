@@ -28,41 +28,41 @@ root = path.dirname path.dirname __dirname
 publicPath = path.join root, 'public'
 
 expressApp
-  .use(express.favicon())
-  # Gzip static files and serve from memory
-  .use(gzippo.staticGzip publicPath, maxAge: ONE_YEAR)
-  # Gzip dynamically rendered content
-  .use(express.compress())
+    .use(express.favicon())
+    # Gzip static files and serve from memory
+    .use(gzippo.staticGzip publicPath, maxAge: ONE_YEAR)
+    # Gzip dynamically rendered content
+    .use(express.compress())
 
-  # Uncomment to add form data parsing support
-  .use(express.bodyParser())
-  .use(express.methodOverride())
+    # Uncomment to add form data parsing support
+    .use(express.bodyParser())
+    .use(express.methodOverride())
 
-  # Uncomment and supply secret to add Derby session handling
-  # Derby session middleware creates req.session and socket.io sessions
-  .use(express.cookieParser())
-  .use(store.sessionMiddleware
-    secret: process.env.SESSION_SECRET || 'YOUR SECRET HERE'
-    cookie: {maxAge: ONE_YEAR}
-  )
+    # Uncomment and supply secret to add Derby session handling
+    # Derby session middleware creates req.session and socket.io sessions
+    .use(express.cookieParser())
+    .use(store.sessionMiddleware
+      secret: process.env.SESSION_SECRET || 'YOUR SECRET HERE'
+      cookie: {maxAge: ONE_YEAR}
+    )
 
-  # Adds req.getModel method
-  .use(store.modelMiddleware())
-  # Adds users.$userId from session.
-  .use(authentication.middleware)
-  # Creates an express middleware from the app's routes
-  .use(goals.router())
-  .use(expressApp.router)
-  .use(serverError root)
+    # Adds req.getModel method
+    .use(store.modelMiddleware())
+    # Adds users.$userId from session.
+    .use(authentication.middleware)
+    # Creates an express middleware from the app's routes
+    .use(goals.router())
+    .use(expressApp.router)
+    .use(serverError root)
 
 
 ## SERVER ONLY ROUTES ##
 
 expressApp.post '/login/', (req, res, next) ->
-  session = req.session
-  userId = req.body.userId
-  if userId
-      session.userId = req.body.userId
-  res.redirect '/users/'
+    session = req.session
+    userId = req.body.userId
+    if userId
+        session.userId = req.body.userId
+    res.redirect '/users/'
 expressApp.all '*', (req) ->
-  throw "404: #{req.url}"
+    throw "404: #{req.url}"

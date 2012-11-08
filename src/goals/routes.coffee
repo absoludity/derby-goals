@@ -34,6 +34,10 @@ get '/users/', (page, model) ->
     allUsersQuery = model.query('users').allUsers()
     model.subscribe allUsersQuery, (errors, users) ->
         model.ref '_users', users
+        userId = model.get('_sessionUserId')
+        user = model.filter('_users')
+            .where('id').equals(userId)
+        model.ref '_currentUser', user.one()
         page.render 'users'
 
 get '/users/:userId?/', (page, model, {userId}) ->
