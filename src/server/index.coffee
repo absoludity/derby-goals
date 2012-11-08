@@ -58,5 +58,11 @@ expressApp
 
 ## SERVER ONLY ROUTES ##
 
+expressApp.post '/login/', (req, res, next) ->
+  session = req.session
+  userId = req.body.userId
+  if userId
+      session.userId = req.body.userId
+  res.redirect '/users/'
 expressApp.all '*', (req) ->
   throw "404: #{req.url}"

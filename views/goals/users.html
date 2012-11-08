@@ -15,6 +15,7 @@
             <tr>
                 <th>Name</th>
                 <th>UserId</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -22,6 +23,7 @@
             <tr>
                 <td>{{.name}}</td>
                 <td><a href="/users/{{.id}}/">{{.id}}</a></td>
+                <td><form method="post" action="/login/"><button type="submit" name="userId" value="{{.id}}">Login</button></form></td>
             </tr>
         {/each}
     </tbody>
