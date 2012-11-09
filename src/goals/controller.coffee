@@ -17,7 +17,7 @@ ready (model) ->
         if goalsTodo and goalsTodo.length > 1
             defaults.status = 'backlog'
         defaults.title = goalTitle
-        defaults.parentGoal = currentGoal.get('id')
+        defaults.parentGoal = currentGoal.get('id') or ''
         defaults.userId = sessionUserId.get()
         subGoalList.push defaults
 

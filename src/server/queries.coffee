@@ -4,6 +4,7 @@ module.exports = (store) ->
 
     store.query.expose 'goals', 'goalsForUser', (userId) ->
         @where('userId').equals(userId)
+        .where('parentGoal').equals('')
 
     store.query.expose 'reviews', 'reviewsForGoal', (goalId) ->
         @where('goalId').equals(goalId)
