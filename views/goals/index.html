@@ -83,7 +83,7 @@
 
 
 <subGoal:>
-  <div class="well card" draggable=true x-bind="dragstart: goalDragStart, dragend: goalDragEnd">
+  <div class="well card" draggable=true x-bind="dragstart: goalDragStart, dragend: goalDragEnd, dragover: dragOver, drop: goalDrop">
     <a href="/goals/{{.id}}/">{.title}</a>
     <p>Status: {.status}</p>
   </div>

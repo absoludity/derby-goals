@@ -28,9 +28,9 @@
     </boot:tabs>
 
 <breadcrumb:>
-    <p>Crumbs: {{ _goal._user.name }}</p>
+<p>Crumbs: <a href="/users/{{_goal._user.id}}/">{{ _goal._user.name }}</a>
     {#if _goal.parentGoal}
-    <p><a href="/goals/{_goal.parentGoal}/">{_goal.parentGoal}</a></p>
+    → <a href="/goals/{_goal.parentGoal}/">{_goal.parentGoal}</a>
     {/}
 
 <goalDetails:>

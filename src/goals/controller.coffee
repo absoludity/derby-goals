@@ -64,7 +64,11 @@ ready (model) ->
         classList = e.target.classList
         classList.remove 'over'
         goalId = e.dataTransfer.getData('text/plain')
-        [].forEach.call ['todo', 'inprogress', 'done', 'backlog'], (status) ->
-            if classList.contains status
-                model.set "goals." + goalId + ".status", status
-                return
+        if classList.contains 'col'
+            [].forEach.call ['todo', 'inprogress', 'done', 'backlog'], (status) ->
+                if classList.contains status
+                    model.set "goals." + goalId + ".status", status
+                    return
+        else if classList.contains 'card'
+            parentGoal = model.at(e.target)
+            model.set "goals." + goalId + ".parentGoal", parentGoal.get('id')
