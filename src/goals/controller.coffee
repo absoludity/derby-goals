@@ -70,5 +70,17 @@ ready (model) ->
                     model.set "goals." + goalId + ".status", status
                     return
         else if classList.contains 'card'
+            # Remove from the current goal (or user)
+            subGoalIndex = subGoalList.get().indexOf model.get('goals.' + goalId)
+            # Erm, without a debugger statement here I consistently get:
+            # Unexpected end of input.
+            debugger
+            subGoalList.remove subGoalIndex
+            # (Get index, then use model.remove)
+            # Update the goal itself with its parent.
             parentGoal = model.at(e.target)
-            model.set "goals." + goalId + ".parentGoal", parentGoal.get('id')
+            parentId = parentGoal.get('id')
+            model.set "goals." + goalId + ".parentGoal", parentId
+            # Then add it to the targets subgoalIds
+            model.push "goals." + parentId + ".subgoalIds", goalId
+
