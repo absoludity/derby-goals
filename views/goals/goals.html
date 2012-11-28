@@ -9,6 +9,7 @@
 
 <content:>
     <div class="hero-unit">
+      <app:breadcrumb>
       <h1 contenteditable>{unescaped _goal.title}</h1>
       <p contenteditable>{unescaped _goal.description}</p>
 
@@ -25,6 +26,12 @@
         </boot:tab>
 
     </boot:tabs>
+
+<breadcrumb:>
+    <p>Crumbs: {{ _goal._user.name }}</p>
+    {#if _goal.parentGoal}
+    <p><a href="/goals/{_goal.parentGoal}/">{_goal.parentGoal}</a></p>
+    {/}
 
 <goalDetails:>
 <a class="btn btn-primary" x-bind=click:expandDetails>Details &raquo;</a>
